@@ -14,7 +14,7 @@ public class Maps {
 
     public enum MapType {MAP_LANGUAGE, MAP_VOICE, MAP_EFFECT};
     
-    private static Map[] maps = new Map[MapType.values().length];
+    private static final Map[] maps = new Map[MapType.values().length];
     private static final String[] fileNames = {"Languages.json", "Voices.json", "Effects.json"};    
     
     public static void loadMap(MapType mapType){
@@ -25,12 +25,34 @@ public class Maps {
         }
     }
     
-    public static void saveSettings(MapType mapType, Map<String,String> map){
+    public static void saveMap(MapType mapType, Map<String,String> map){
         try{
             new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(new File(fileNames[mapType.ordinal()]), map);
             maps[mapType.ordinal()] = map;
         }catch(JacksonException e){
             System.out.println("Failed to save " + mapType.name() + " map: " + e.getMessage());
+        }
+    }
+    
+    public static Map<String,String> getMap(MapType mapType){
+        return maps[mapType.ordinal()];
+    }
+    
+    public static void loadAllMaps(){
+        try{
+            loadMap(MapType.MAP_LANGUAGE);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        try{
+            loadMap(MapType.MAP_VOICE);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        try{
+            loadMap(MapType.MAP_EFFECT);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

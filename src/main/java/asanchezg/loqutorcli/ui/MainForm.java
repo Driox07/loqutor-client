@@ -2,8 +2,11 @@ package asanchezg.loqutorcli.ui;
 
 import asanchezg.loqutorcli.Loqutor;
 import asanchezg.loqutorcli.ttsservice.TTSService;
+import asanchezg.loqutorcli.ttsservice.maps.Maps;
 import java.io.ByteArrayInputStream;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
 /**
@@ -14,8 +17,58 @@ public class MainForm extends javax.swing.JFrame {
 
     public MainForm() {
         initComponents();
+        loadLanguageComboBox();
+        loadVoiceComboBox();
+        loadEffectComboBox();
     }
-
+    
+    private void loadLanguageComboBox(){
+        Map<String,String> langs = Maps.getMap(Maps.MapType.MAP_LANGUAGE);
+        for(String langName : langs.keySet()){
+            langCombo.addItem(langName);
+        }
+    }
+    
+    private void loadVoiceComboBox(){
+        Map<String,String> voices = Maps.getMap(Maps.MapType.MAP_VOICE);
+        for(String voiceName : voices.keySet()){
+            voiceCombo.addItem(voiceName);
+        }
+    }
+    
+    private void loadEffectComboBox(){
+        Map<String,String> effects = Maps.getMap(Maps.MapType.MAP_EFFECT);
+        for(String effectName : effects.keySet()){
+            effectCombo.addItem(effectName);
+        }
+    }
+    
+    private void playScript(){
+        try{
+            String text = scriptArea.getText().trim();
+            if(text.isBlank()){
+                JOptionPane.showMessageDialog(null, "Se debe introducir texto para poder generar texto.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
+            String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+            String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
+            
+            TTSService.textToSpeech(text, lang, voice, effect, ""+levelSpinner.getValue());
+            if(Loqutor.player != null){
+                Loqutor.player.close();
+            }
+            new Thread(() -> {
+                try {
+                    Loqutor.player.play();
+                } catch (JavaLayerException e) {
+                    System.out.println(e.getMessage());
+                }
+            }).start();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -26,10 +79,10 @@ public class MainForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jSpinner1 = new javax.swing.JSpinner();
+        effectCombo = new javax.swing.JComboBox<>();
+        langCombo = new javax.swing.JComboBox<>();
+        voiceCombo = new javax.swing.JComboBox<>();
+        levelSpinner = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         scriptArea = new javax.swing.JTextArea();
@@ -93,7 +146,7 @@ public class MainForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(effectCombo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -101,7 +154,7 @@ public class MainForm extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
-        jPanel1.add(jComboBox2, gridBagConstraints);
+        jPanel1.add(langCombo, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -109,14 +162,14 @@ public class MainForm extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 8);
-        jPanel1.add(jComboBox3, gridBagConstraints);
+        jPanel1.add(voiceCombo, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        jPanel1.add(levelSpinner, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -237,14 +290,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_apiSettingsMenuItemActionPerformed
 
     private void playScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playScriptActionPerformed
-        try{
-            if(Loqutor.player != null){
-                Loqutor.player.close();
-            }
-            
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        playScript();
     }//GEN-LAST:event_playScriptActionPerformed
 
 
@@ -252,11 +298,9 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem aboutLoqutorClientMenuItem;
     private javax.swing.JMenu aboutMenu;
     private javax.swing.JMenuItem apiSettingsMenuItem;
+    private javax.swing.JComboBox<String> effectCombo;
     private javax.swing.JButton exportScript;
     private javax.swing.JButton exportSelection;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -268,10 +312,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JComboBox<String> langCombo;
+    private javax.swing.JSpinner levelSpinner;
     private javax.swing.JButton playScript;
     private javax.swing.JButton playSelection;
     private javax.swing.JButton saveScript;
     private javax.swing.JTextArea scriptArea;
+    private javax.swing.JComboBox<String> voiceCombo;
     // End of variables declaration//GEN-END:variables
 }

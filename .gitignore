@@ -16,6 +16,6 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# API settings file
-ApiSettings.json
+# API settings, maps, audio...
+*.json
 *.mp3

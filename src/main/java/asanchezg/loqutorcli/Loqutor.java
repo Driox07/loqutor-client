@@ -2,6 +2,7 @@ package asanchezg.loqutorcli;
 
 import asanchezg.loqutorcli.ttsservice.APISettings;
 import asanchezg.loqutorcli.ttsservice.TTSService;
+import asanchezg.loqutorcli.ttsservice.maps.Maps;
 import asanchezg.loqutorcli.ui.MainForm;
 import javazoom.jl.player.Player;
 
@@ -23,6 +24,7 @@ public class Loqutor {
             System.out.println("Error initializing UI: " + ex);
         }
         APISettings.loadSettings();
+        Maps.loadAllMaps();
         MainForm mainForm = new MainForm();
         mainForm.setLocationRelativeTo(null);
         java.awt.EventQueue.invokeLater(() -> mainForm.setVisible(true));
