@@ -2,7 +2,9 @@ package asanchezg.loqutorcli.ui;
 
 import asanchezg.loqutorcli.Loqutor;
 import asanchezg.loqutorcli.ttsservice.TTSService;
+import java.io.ByteArrayInputStream;
 import javax.swing.JOptionPane;
+import javazoom.jl.player.Player;
 
 /**
  *
@@ -235,8 +237,10 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_apiSettingsMenuItemActionPerformed
 
     private void playScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playScriptActionPerformed
-        TTSService tts = Loqutor.tts;
         try{
+            if(Loqutor.player != null){
+                Loqutor.player.close();
+            }
             
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

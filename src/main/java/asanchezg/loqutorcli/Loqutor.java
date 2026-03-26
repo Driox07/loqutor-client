@@ -3,13 +3,14 @@ package asanchezg.loqutorcli;
 import asanchezg.loqutorcli.ttsservice.APISettings;
 import asanchezg.loqutorcli.ttsservice.TTSService;
 import asanchezg.loqutorcli.ui.MainForm;
+import javazoom.jl.player.Player;
 
 /**
  *
  * @author Adrián Sánchez Galera
  */
 public class Loqutor {
-    public static TTSService tts;
+    public static Player player;
     public static void main(String[] args) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -22,7 +23,6 @@ public class Loqutor {
             System.out.println("Error initializing UI: " + ex);
         }
         APISettings.loadSettings();
-        tts = new TTSService();
         MainForm mainForm = new MainForm();
         mainForm.setLocationRelativeTo(null);
         java.awt.EventQueue.invokeLater(() -> mainForm.setVisible(true));
