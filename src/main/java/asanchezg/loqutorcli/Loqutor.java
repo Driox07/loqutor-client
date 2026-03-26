@@ -1,5 +1,7 @@
 package asanchezg.loqutorcli;
 
+import asanchezg.loqutorcli.ttsservice.APISettings;
+import asanchezg.loqutorcli.ttsservice.TTSService;
 import asanchezg.loqutorcli.ui.MainForm;
 
 /**
@@ -7,7 +9,7 @@ import asanchezg.loqutorcli.ui.MainForm;
  * @author Adrián Sánchez Galera
  */
 public class Loqutor {
-    
+    public static TTSService tts;
     public static void main(String[] args) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -19,6 +21,10 @@ public class Loqutor {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             System.out.println("Error initializing UI: " + ex);
         }
-        java.awt.EventQueue.invokeLater(() -> new MainForm().setVisible(true));
+        APISettings.loadSettings();
+        tts = new TTSService();
+        MainForm mainForm = new MainForm();
+        mainForm.setLocationRelativeTo(null);
+        java.awt.EventQueue.invokeLater(() -> mainForm.setVisible(true));
     }
 }

@@ -11,9 +11,9 @@ public class CacheSignature {
     private final String language;
     private final String voice;
     private final String effect;
-    private final int    level;
+    private final String    level;
     
-    public CacheSignature(String text, String language, String voice, String effect, int level) {
+    public CacheSignature(String text, String language, String voice, String effect, String level) {
         this.text = text;
         this.language = language;
         this.voice = voice;
@@ -35,7 +35,7 @@ public class CacheSignature {
                this.language.equals(other.language) &&
                this.voice.equals(other.voice) &&
                this.effect.equals(other.effect) &&
-               this.level == other.level;
+               this.level.equals(other.level);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CacheSignature {
         hash = 37 * hash + Objects.hashCode(this.language);
         hash = 37 * hash + Objects.hashCode(this.voice);
         hash = 37 * hash + Objects.hashCode(this.effect);
-        hash = 37 * hash + this.level;
+        hash = 37 * hash + Objects.hashCode(this.level);
         return hash;
     }
 }

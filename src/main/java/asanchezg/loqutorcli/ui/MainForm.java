@@ -1,5 +1,9 @@
 package asanchezg.loqutorcli.ui;
 
+import asanchezg.loqutorcli.Loqutor;
+import asanchezg.loqutorcli.ttsservice.TTSService;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Adrián Sánchez Galera
@@ -26,16 +30,17 @@ public class MainForm extends javax.swing.JFrame {
         jSpinner1 = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        scriptArea = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        saveScript = new javax.swing.JButton();
+        exportScript = new javax.swing.JButton();
+        exportSelection = new javax.swing.JButton();
+        playScript = new javax.swing.JButton();
+        playSelection = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        apiSettingsMenuItem = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
         aboutLoqutorClientMenuItem = new javax.swing.JMenuItem();
 
@@ -119,9 +124,9 @@ public class MainForm extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Guión"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        scriptArea.setColumns(20);
+        scriptArea.setRows(5);
+        jScrollPane1.setViewportView(scriptArea);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -140,45 +145,46 @@ public class MainForm extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Guardar Guión");
-        jButton1.setMinimumSize(new java.awt.Dimension(200, 23));
-        jButton1.setPreferredSize(new java.awt.Dimension(200, 23));
+        saveScript.setText("Guardar Guión");
+        saveScript.setMinimumSize(new java.awt.Dimension(200, 23));
+        saveScript.setPreferredSize(new java.awt.Dimension(200, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanel3.add(jButton1, gridBagConstraints);
+        jPanel3.add(saveScript, gridBagConstraints);
 
-        jButton2.setText("Exportar Guión");
-        jButton2.setMinimumSize(new java.awt.Dimension(200, 23));
-        jButton2.setPreferredSize(new java.awt.Dimension(200, 23));
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        exportScript.setText("Exportar Guión");
+        exportScript.setMinimumSize(new java.awt.Dimension(200, 23));
+        exportScript.setPreferredSize(new java.awt.Dimension(200, 23));
+        exportScript.addActionListener(this::exportScriptActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanel3.add(jButton2, gridBagConstraints);
+        jPanel3.add(exportScript, gridBagConstraints);
 
-        jButton3.setText("Exportar Selección");
-        jButton3.setMinimumSize(new java.awt.Dimension(200, 23));
-        jButton3.setPreferredSize(new java.awt.Dimension(200, 23));
+        exportSelection.setText("Exportar Selección");
+        exportSelection.setMinimumSize(new java.awt.Dimension(200, 23));
+        exportSelection.setPreferredSize(new java.awt.Dimension(200, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanel3.add(jButton3, gridBagConstraints);
+        jPanel3.add(exportSelection, gridBagConstraints);
 
-        jButton4.setText("Reproducir Guión");
-        jButton4.setMinimumSize(new java.awt.Dimension(200, 23));
-        jButton4.setPreferredSize(new java.awt.Dimension(200, 23));
+        playScript.setText("Reproducir Guión");
+        playScript.setMinimumSize(new java.awt.Dimension(200, 23));
+        playScript.setPreferredSize(new java.awt.Dimension(200, 23));
+        playScript.addActionListener(this::playScriptActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanel3.add(jButton4, gridBagConstraints);
+        jPanel3.add(playScript, gridBagConstraints);
 
-        jButton5.setText("Reproducir Selección");
-        jButton5.setMinimumSize(new java.awt.Dimension(200, 23));
-        jButton5.setPreferredSize(new java.awt.Dimension(200, 23));
+        playSelection.setText("Reproducir Selección");
+        playSelection.setMinimumSize(new java.awt.Dimension(200, 23));
+        playSelection.setPreferredSize(new java.awt.Dimension(200, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanel3.add(jButton5, gridBagConstraints);
+        jPanel3.add(playSelection, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -192,6 +198,11 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Editar");
+
+        apiSettingsMenuItem.setText("Configuración de API");
+        apiSettingsMenuItem.addActionListener(this::apiSettingsMenuItemActionPerformed);
+        jMenu2.add(apiSettingsMenuItem);
+
         jMenuBar1.add(jMenu2);
 
         aboutMenu.setText("Acerca de");
@@ -207,25 +218,38 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void exportScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportScriptActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_exportScriptActionPerformed
 
     private void aboutLoqutorClientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutLoqutorClientMenuItemActionPerformed
-       AboutDialog ad = new AboutDialog(this, true);
-       ad.setLocationRelativeTo(null);
-       ad.setVisible(true);
+        AboutDialog ad = new AboutDialog(this, true);
+        ad.setLocationRelativeTo(null);
+        ad.setVisible(true);
     }//GEN-LAST:event_aboutLoqutorClientMenuItemActionPerformed
+
+    private void apiSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apiSettingsMenuItemActionPerformed
+        SettingsDialog sd = new SettingsDialog(this, true);
+        sd.setLocationRelativeTo(null);
+        sd.setVisible(true);
+    }//GEN-LAST:event_apiSettingsMenuItemActionPerformed
+
+    private void playScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playScriptActionPerformed
+        TTSService tts = Loqutor.tts;
+        try{
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_playScriptActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutLoqutorClientMenuItem;
     private javax.swing.JMenu aboutMenu;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JMenuItem apiSettingsMenuItem;
+    private javax.swing.JButton exportScript;
+    private javax.swing.JButton exportSelection;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -241,6 +265,9 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton playScript;
+    private javax.swing.JButton playSelection;
+    private javax.swing.JButton saveScript;
+    private javax.swing.JTextArea scriptArea;
     // End of variables declaration//GEN-END:variables
 }

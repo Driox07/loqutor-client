@@ -1,29 +1,53 @@
 package asanchezg.loqutorcli.ttsservice;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.File;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+
 
 /**
  *
  * @author Adrián Sánchez Galera
  */
-public class APISettings implements Serializable{
-    public static void save(APISettings settings, String file) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(settings);
+public class APISettings{
+    // Loaded settings
+    private static APISettings apiSettings = null;
+    
+    public static APISettings getAPISettings(){
+        return apiSettings;
+    } 
+    
+    private static boolean validApiConfigured = false;
+    
+    public static boolean isValidApiConfigured(){
+        return validApiConfigured;
+    }
+    
+    // Settings loader
+    private static final String CONFIG_FILE = "ApiSettings.json";
+    private static final ObjectMapper om = new ObjectMapper();
+    
+    public static void loadSettings(){
+        try{
+            apiSettings = om.readValue(new File(CONFIG_FILE), APISettings.class);
+            validApiConfigured = true;
+        }catch(JacksonException e){
+            validApiConfigured = false;
+            System.out.println("Failed to load API settings file: " + e.getMessage());
+        }
+    }
+    
+    public static void saveSettings(APISettings settings){
+        try{
+            om.writerWithDefaultPrettyPrinter().writeValue(new File(CONFIG_FILE), settings);
+            apiSettings = settings;
+            validApiConfigured = true;
+        }catch(JacksonException e){
+            validApiConfigured = false;
+            System.out.println("Failed to save API settings file: " + e.getMessage());
         }
     }
 
-    public static APISettings load(String file) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            return (APISettings) ois.readObject();
-        }
-    }
-    private static final long serialVersionUID = 1L;
     public String url;
     public String engineParameter;
     public String languageParameter;
@@ -32,4 +56,18 @@ public class APISettings implements Serializable{
     public String formatParameter;
     public String effectParameter;
     public String levelParameter;
+    
+    public APISettings() {
+    }
+    
+    public APISettings(String url, String engineParameter, String languageParameter, String voiceParameter, String textParameter, String formatParameter, String effectParameter, String levelParameter) {
+        this.url = url;
+        this.engineParameter = engineParameter;
+        this.languageParameter = languageParameter;
+        this.voiceParameter = voiceParameter;
+        this.textParameter = textParameter;
+        this.formatParameter = formatParameter;
+        this.effectParameter = effectParameter;
+        this.levelParameter = levelParameter;
+    }
 }
