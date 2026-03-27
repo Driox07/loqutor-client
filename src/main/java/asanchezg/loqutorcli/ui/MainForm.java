@@ -112,7 +112,7 @@ public class MainForm extends javax.swing.JFrame {
         String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
         String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
         String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
-        String level = (effect == null ? null : (String)levelSpinner.getValue());
+        String level = (effect == null ? null : ""+((int)levelSpinner.getValue()));
 
         new Thread(() -> {
             try {

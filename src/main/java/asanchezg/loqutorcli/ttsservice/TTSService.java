@@ -126,6 +126,7 @@ public class TTSService {
 
                 String url = buildUrl(fragments[i], language, voice, effectType, effectLevel);
                 Request request = new Request.Builder().url(url).build();
+                System.out.println("URL: " + request.toString());
 
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
