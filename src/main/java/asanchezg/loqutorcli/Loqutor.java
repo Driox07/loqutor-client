@@ -23,7 +23,6 @@ public class Loqutor {
     private static List<Image> icons;
     
     private static void loadIcon(){
-        // Buscamos la imagen en el classpath (dentro de resources)
         URL icon16url = Loqutor.class.getResource("/icons/icon16.png");
         URL icon32url = Loqutor.class.getResource("/icons/icon32.png");
         if (icon16url != null && icon32url != null) {

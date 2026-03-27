@@ -105,7 +105,6 @@ public class TTSService {
             return cachedAudio;
         }
 
-        // Creamos un ByteArrayOutputStream para ir agregando fragmentos
         ByteArrayOutputStream audioStream = new ByteArrayOutputStream();
         String[] fragments = subdivideText(text);
 
