@@ -62,8 +62,14 @@ Artefacto generado:
 
 ## Ejecucion
 
+Puedes ejecutar la aplicacion de tres formas:
+
+1. Doble click sobre el archivo `.jar`.
+2. Doble click sobre `.sh` (Linux) o `.bat` (Windows).
+3. Desde terminal:
+
 ```bash
-java -jar target/loqutor-client-1.0.0.jar
+java -jar <nombre-del-jar>
 ```
 
 ## Licencia

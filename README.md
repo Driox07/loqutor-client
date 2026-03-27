@@ -62,8 +62,14 @@ Generated artifact:
 
 ## Run
 
+You can run the application in three ways:
+
+1. Double-click the `.jar` file.
+2. Double-click `.sh` (Linux) or `.bat` (Windows).
+3. From terminal:
+
 ```bash
-java -jar target/loqutor-client-1.0.0.jar
+java -jar <jar-name>
 ```
 
 ## License
