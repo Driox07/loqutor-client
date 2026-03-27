@@ -8,11 +8,14 @@ import asanchezg.loqutorcli.ttsservice.ProgressBar;
  */
 public class ProgressDialog extends javax.swing.JDialog implements ProgressBar {
     
-    private boolean cancelled = false;
+    private volatile boolean cancelled = false;
     
     public ProgressDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(100);
+        progressBar.setValue(0);
     }
 
     @Override

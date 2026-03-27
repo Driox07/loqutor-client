@@ -1,11 +1,7 @@
 package asanchezg.loqutorcli.ttsservice;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
-import java.util.concurrent.ScheduledExecutorService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,7 +15,6 @@ public class TTSService {
     private static CacheSignature cacheSignature = null;
     private static byte[] cachedAudio = null;
     private static final OkHttpClient client = new OkHttpClient();
-    private static final ScheduledExecutorService scheduler = newSingleThreadScheduledExecutor();
     
     private static String buildUrl(String text, String language, String voice, String effectType, String effectLevel){
         APISettings apiSettings = APISettings.getAPISettings();
@@ -114,58 +109,55 @@ public class TTSService {
         ByteArrayOutputStream audioStream = new ByteArrayOutputStream();
         String[] fragments = subdivideText(text);
 
-        // Hilo de fondo
-        Thread ttsThread = new Thread(() -> {
-            try {
-                for (int i = 0; i < fragments.length; i++) {
-                    if (progressBar != null && progressBar.isCancelled()) {
-                        throw new RuntimeException("Operación cancelada");
+        try {
+            if (progressBar != null) {
+                javax.swing.SwingUtilities.invokeLater(() ->
+                    progressBar.updateProgress(0, "Iniciando conversión...")
+                );
+            }
+
+            for (int i = 0; i < fragments.length; i++) {
+                if (progressBar != null && progressBar.isCancelled()) {
+                    throw new Exception("Operación cancelada por el usuario.");
+                }
+
+                String url = buildUrl(fragments[i], language, voice, effectType, effectLevel);
+                Request request = new Request.Builder().url(url).build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new Exception("Error: " + response);
                     }
-
-                    String url = buildUrl(fragments[i], language, voice, effectType, effectLevel);
-                    Request request = new Request.Builder().url(url).build();
-                    Response response = client.newCall(request).execute();
-
-                    if (!response.isSuccessful()) 
-                        throw new RuntimeException("Error: " + response);
 
                     ResponseBody body = response.body();
-                    if (body == null) 
-                        throw new RuntimeException("Error: response body es null");
-
-                    synchronized (audioStream) {
-                        audioStream.write(body.bytes());
+                    if (body == null) {
+                        throw new Exception("Error: response body es null");
                     }
 
-                    if (progressBar != null) {
-                        int progressValue = i + 1;
-                        javax.swing.SwingUtilities.invokeLater(() ->
-                            progressBar.updateProgress(progressValue, "Procesando fragmento " + progressValue + " de " + fragments.length)
-                        );
-                    }
-
-                    Thread.sleep(REQUEST_WAIT_TIME);
+                    audioStream.write(body.bytes());
                 }
 
-                cacheSignature = cs;
-                cachedAudio = audioStream.toByteArray();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            } finally {
                 if (progressBar != null) {
-                    javax.swing.SwingUtilities.invokeLater(progressBar::finishProgress);
+                    int currentFragment = i + 1;
+                    int progressValue = (int) Math.round((currentFragment * 100.0) / fragments.length);
+                    javax.swing.SwingUtilities.invokeLater(() ->
+                        progressBar.updateProgress(progressValue, "Procesando fragmento " + currentFragment + " de " + fragments.length)
+                    );
                 }
+
+                Thread.sleep(REQUEST_WAIT_TIME);
             }
-        });
 
-        // Arrancamos el hilo
-        ttsThread.start();
-
-        // Esperamos a que termine antes de devolver el resultado
-        ttsThread.join();  // ⚠️ Esto solo bloquea el hilo que llama, no el EDT si llamamos desde hilo de fondo
-
-        return cachedAudio;
+            cacheSignature = cs;
+            cachedAudio = audioStream.toByteArray();
+            return cachedAudio;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new Exception("Operación interrumpida.", e);
+        } finally {
+            if (progressBar != null) {
+                javax.swing.SwingUtilities.invokeLater(progressBar::finishProgress);
+            }
+        }
     }
 }

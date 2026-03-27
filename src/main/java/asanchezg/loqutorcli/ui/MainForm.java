@@ -99,32 +99,35 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void play(String text){
-        try{
-            if(text == null || text.isBlank()){
-                JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
-            String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
-            String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
-            String level = (effect == null ? null : (String)levelSpinner.getValue());
-            System.out.println(effect);
-            
-            byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(null, true));
-            if(Loqutor.player != null){
-                Loqutor.player.close();
-            }
-            Loqutor.player = new Player(new ByteArrayInputStream(audio));
-            new Thread(() -> {
-                try {
-                    Loqutor.player.play();
-                } catch (JavaLayerException e) {
-                    System.out.println(e.getMessage());
-                }
-            }).start();
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        if(text == null || text.isBlank()){
+            JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
+        String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
+        String level = (effect == null ? null : (String)levelSpinner.getValue());
+
+        new Thread(() -> {
+            try {
+                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(this, true));
+                if(Loqutor.player != null){
+                    Loqutor.player.close();
+                }
+                Loqutor.player = new Player(new ByteArrayInputStream(audio));
+                new Thread(() -> {
+                    try {
+                        Loqutor.player.play();
+                    } catch (JavaLayerException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }).start();
+            } catch (Exception e) {
+                javax.swing.SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
+                );
+            }
+        }, "loqutor-play-thread").start();
     }
     
     private void playScript(){
@@ -136,38 +139,46 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void export(String text){
-        try{
-            if(text == null || text.isBlank()){
-                JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
-            String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
-            String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
-            String level = (effect == null ? null : (String)levelSpinner.getValue());
-            System.out.println(effect);
-            
-            byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(null, true));
-            JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle("Exportar guión completo...");
-            chooser.setFileFilter(new FileNameExtensionFilter("Archivos de Audio MP3", "mp3"));
-            int userSelection = chooser.showSaveDialog(this);
- 
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                
-                File fileToSave = chooser.getSelectedFile();
-                String path = fileToSave.getAbsolutePath();
-                if (!path.toLowerCase().endsWith(".mp3")) {
-                    fileToSave = new File(path + ".mp3");
-                }
-                FileOutputStream fos = new FileOutputStream(fileToSave);
-                fos.write(audio);
-                fos.close();
-            }
-            
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        if(text == null || text.isBlank()){
+            JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
+        String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
+        String level = (effect == null ? null : (String)levelSpinner.getValue());
+
+        new Thread(() -> {
+            try {
+                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(this, true));
+                final File[] fileToSaveRef = new File[1];
+
+                javax.swing.SwingUtilities.invokeAndWait(() -> {
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setDialogTitle("Exportar guión completo...");
+                    chooser.setFileFilter(new FileNameExtensionFilter("Archivos de Audio MP3", "mp3"));
+                    int userSelection = chooser.showSaveDialog(this);
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File fileToSave = chooser.getSelectedFile();
+                        String path = fileToSave.getAbsolutePath();
+                        if (!path.toLowerCase().endsWith(".mp3")) {
+                            fileToSave = new File(path + ".mp3");
+                        }
+                        fileToSaveRef[0] = fileToSave;
+                    }
+                });
+
+                if (fileToSaveRef[0] != null) {
+                    try (FileOutputStream fos = new FileOutputStream(fileToSaveRef[0])) {
+                        fos.write(audio);
+                    }
+                }
+            } catch (Exception e) {
+                javax.swing.SwingUtilities.invokeLater(() ->
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
+                );
+            }
+        }, "loqutor-export-thread").start();
     }
     
     private void exportScript(){
