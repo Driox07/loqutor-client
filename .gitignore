@@ -19,3 +19,7 @@ buildNumber.properties
 # API settings, maps, audio...
 *.json
 *.mp3
+
+# Other files
+zip_release.sh
+*.zip
