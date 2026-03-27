@@ -6,7 +6,7 @@ Loqutor Client is a Java desktop application (Swing) for text-to-speech (TTS). I
 
 ## General Information
 
-- **Version:** 1.0.0
+- **Version:** 1.0.3
 - **Author:** Adrian Sanchez Galera
 - **Core stack:** Java 17 + Swing + Maven
 

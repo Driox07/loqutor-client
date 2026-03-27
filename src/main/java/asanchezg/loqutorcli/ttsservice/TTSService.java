@@ -16,7 +16,7 @@ public class TTSService {
     private static byte[] cachedAudio = null;
     private static final OkHttpClient client = new OkHttpClient();
     
-    private static String buildUrl(String text, String language, String voice, String effectType, String effectLevel){
+    private static String buildUrl(String text, String language, String voice, String effectType, String effectLevel, String format, String engine){
         APISettings apiSettings = APISettings.getAPISettings();
         String url = apiSettings.url + "?";
         if(effectType != null){
@@ -32,8 +32,8 @@ public class TTSService {
         if(voice != null){
             url = url + apiSettings.voiceParameter + "=" + voice + "&";
         }
-        url = url + apiSettings.formatParameter + "=mp3&";
-        url = url + apiSettings.engineParameter + "=2";
+        url = url + apiSettings.formatParameter + "=" + format + "&";
+        url = url + apiSettings.engineParameter + "=" + engine;
         return url;
     }
     
@@ -90,18 +90,16 @@ public class TTSService {
             String voice,
             String effectType,
             String effectLevel,
+            String format,
+            String engine,
             ProgressBar progressBar
     ) throws Exception {
-
-        if (!APISettings.isValidApiConfigured()) 
-            throw new Exception("Error: debe configurarse una API.\nConfigúrala en Editar > Configuración de API.");
-
         if (progressBar != null) {
             javax.swing.SwingUtilities.invokeLater(progressBar::makeVisible);
         }
 
         // Comprobación de cache rápida
-        CacheSignature cs = new CacheSignature(text, language, voice, effectType, effectLevel);
+        CacheSignature cs = new CacheSignature(text, language, voice, effectType, effectLevel, format, engine);
         if (cs.equals(cacheSignature) && cachedAudio != null) {
             if(progressBar != null){
                 javax.swing.SwingUtilities.invokeLater(progressBar::finishProgress);
@@ -124,7 +122,7 @@ public class TTSService {
                     throw new Exception("Operación cancelada por el usuario.");
                 }
 
-                String url = buildUrl(fragments[i], language, voice, effectType, effectLevel);
+                String url = buildUrl(fragments[i], language, voice, effectType, effectLevel, format, engine);
                 Request request = new Request.Builder().url(url).build();
                 System.out.println("URL: " + request.toString());
 

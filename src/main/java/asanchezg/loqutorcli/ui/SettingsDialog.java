@@ -24,7 +24,8 @@ public class SettingsDialog extends javax.swing.JDialog {
                !formatField.getText().isBlank() &&
                !effectField.getText().isBlank() &&
                !levelField.getText().isBlank() &&
-               !((int)limitSpinner.getValue() <= 0);
+               !((int)limitSpinner.getValue() <= 0) &&
+               !defaultFormatField.getText().isBlank();
     }
     
     private APISettings createAPISettings(){
@@ -36,7 +37,8 @@ public class SettingsDialog extends javax.swing.JDialog {
         formatField.getText(),
         effectField.getText(),
         levelField.getText(),
-        (int)limitSpinner.getValue());
+        (int)limitSpinner.getValue(),
+        defaultFormatField.getText());
     }
     
     private void loadFields(){
@@ -51,6 +53,7 @@ public class SettingsDialog extends javax.swing.JDialog {
             effectField.setText(apiSettings.effectParameter);
             levelField.setText(apiSettings.levelParameter);
             limitSpinner.setValue(apiSettings.textLimit);
+            defaultFormatField.setText(apiSettings.defaultFormat);
         }
     }
 
@@ -79,13 +82,15 @@ public class SettingsDialog extends javax.swing.JDialog {
         formatField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         limitSpinner = new javax.swing.JSpinner();
+        jLabel10 = new javax.swing.JLabel();
+        defaultFormatField = new javax.swing.JTextField();
         cancelBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(456, 347));
+        setPreferredSize(new java.awt.Dimension(456, 366));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("API Settings"));
@@ -227,6 +232,20 @@ public class SettingsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(limitSpinner, gridBagConstraints);
 
+        jLabel10.setText("Default format");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        jPanel1.add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
+        jPanel1.add(defaultFormatField, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -277,10 +296,12 @@ public class SettingsDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField apiField;
     private javax.swing.JButton cancelBtn;
+    private javax.swing.JTextField defaultFormatField;
     private javax.swing.JTextField effectField;
     private javax.swing.JTextField engineField;
     private javax.swing.JTextField formatField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

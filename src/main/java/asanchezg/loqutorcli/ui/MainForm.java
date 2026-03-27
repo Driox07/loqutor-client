@@ -1,6 +1,7 @@
 package asanchezg.loqutorcli.ui;
 
 import asanchezg.loqutorcli.Loqutor;
+import asanchezg.loqutorcli.ttsservice.APISettings;
 import asanchezg.loqutorcli.ttsservice.TTSService;
 import asanchezg.loqutorcli.ttsservice.maps.Maps;
 import java.awt.HeadlessException;
@@ -101,6 +102,10 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void play(String text){
+        if (!APISettings.isValidApiConfigured()){
+            JOptionPane.showMessageDialog(null, "Debe configurarse una API.\nConfigúrala en Editar > Configuración de API.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if(!Maps.areMapsLoaded()){
             JOptionPane.showMessageDialog(null, "Los mapas no se cargaron correctamente.\nAsegúrate de tener languajes.json, voices.json y effects.json válidos en la carpeta del programa.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -110,13 +115,15 @@ public class MainForm extends javax.swing.JFrame {
             return;
         }
         String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
-        String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String engineVoice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String engine = engineVoice.split(";")[0];
+        String voice = engineVoice.split(";")[1];
         String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
         String level = (effect == null ? null : ""+((int)levelSpinner.getValue()));
-
+        String format = APISettings.getAPISettings().defaultFormat;
         new Thread(() -> {
             try {
-                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(this, true));
+                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, format, engine, new ProgressDialog(this, true));
                 if(Loqutor.player != null){
                     Loqutor.player.close();
                 }
@@ -145,6 +152,10 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void export(String text){
+        if (!APISettings.isValidApiConfigured()){
+            JOptionPane.showMessageDialog(null, "Debe configurarse una API.\nConfigúrala en Editar > Configuración de API.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if(!Maps.areMapsLoaded()){
             JOptionPane.showMessageDialog(null, "Los mapas no se cargaron correctamente.\nAsegúrate de tener languajes.json, voices.json y effects.json válidos en la carpeta del programa.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -154,13 +165,15 @@ public class MainForm extends javax.swing.JFrame {
             return;
         }
         String lang = Maps.getMap(Maps.MapType.MAP_LANGUAGE).get((String)langCombo.getSelectedItem());
-        String voice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String engineVoice = Maps.getMap(Maps.MapType.MAP_VOICE).get((String)voiceCombo.getSelectedItem());
+        String engine = engineVoice.split(";")[0];
+        String voice = engineVoice.split(";")[1];
         String effect = Maps.getMap(Maps.MapType.MAP_EFFECT).get((String)effectCombo.getSelectedItem());
         String level = (effect == null ? null : ""+((int)levelSpinner.getValue()));
-
+        String format = APISettings.getAPISettings().defaultFormat;
         new Thread(() -> {
             try {
-                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, new ProgressDialog(this, true));
+                byte[] audio = TTSService.textToSpeech(text, lang, voice, effect, level, format, engine, new ProgressDialog(this, true));
                 final File[] fileToSaveRef = new File[1];
 
                 javax.swing.SwingUtilities.invokeAndWait(() -> {

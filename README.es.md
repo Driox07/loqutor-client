@@ -6,7 +6,7 @@ Loqutor Client es una aplicacion de escritorio Java (Swing) para sintesis de voz
 
 ## Informacion General
 
-- **Version:** 1.0.0
+- **Version:** 1.0.3
 - **Autor:** Adrian Sanchez Galera
 - **Tecnologia base:** Java 17 + Swing + Maven
 

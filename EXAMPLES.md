@@ -18,6 +18,7 @@ Example:
   "voiceParameter": "voice",
   "textParameter": "text",
   "formatParameter": "format",
+  "defaultFormat": "mp3",
   "effectParameter": "effect",
   "levelParameter": "level",
   "textLimit": 100
@@ -32,6 +33,7 @@ Fields:
 - `voiceParameter`: name of the voice query parameter.
 - `textParameter`: name of the text query parameter.
 - `formatParameter`: name of the output format query parameter.
+- `defaultFormat`: default output format value sent in `formatParameter` (for example, `mp3`).
 - `effectParameter`: name of the effect type query parameter.
 - `levelParameter`: name of the effect level query parameter.
 - `textLimit`: maximum number of characters per request. If the text exceeds this value, the app splits it into fragments.
@@ -61,19 +63,25 @@ Interpretation:
 
 Map from voice options shown in the UI to the actual value sent to the API.
 
+Voice values now use this format:
+
+- `engine;voiceId`
+
 Example:
 
 ```json
 {
-  "Paco": "paco",
-  "Lucía": "lucia"
+  "Paco": "engine_a;6",
+  "Lucía": "engine_b;lucia"
 }
 ```
 
 Interpretation:
 
 - JSON key: option label shown in the UI.
-- JSON value: actual value for the API.
+- JSON value: a compound value in the format `engine;voiceId`.
+- `engine`: engine identifier to send in `engineParameter`.
+- `voiceId`: voice identifier to send in `voiceParameter`.
 - If the value is `null`, that parameter is removed from the URL (`voiceParameter`).
 
 ## 4) Effects.json

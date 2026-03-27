@@ -57,11 +57,12 @@ public class APISettings{
     public String effectParameter;
     public String levelParameter;
     public int textLimit;
+    public String defaultFormat;
     
     public APISettings() {
     }
     
-    public APISettings(String url, String engineParameter, String languageParameter, String voiceParameter, String textParameter, String formatParameter, String effectParameter, String levelParameter, int textLimit) {
+    public APISettings(String url, String engineParameter, String languageParameter, String voiceParameter, String textParameter, String formatParameter, String effectParameter, String levelParameter, int textLimit, String defaultFormat) {
         this.url = url;
         this.engineParameter = engineParameter;
         this.languageParameter = languageParameter;
@@ -71,5 +72,6 @@ public class APISettings{
         this.effectParameter = effectParameter;
         this.levelParameter = levelParameter;
         this.textLimit = textLimit;
+        this.defaultFormat = defaultFormat;
     }
 }
