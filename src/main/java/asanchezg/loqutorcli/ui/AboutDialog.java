@@ -41,7 +41,7 @@ public class AboutDialog extends javax.swing.JDialog {
         gridBagConstraints.gridy = 3;
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Versión: 1.0.0");
+        jLabel2.setText("Versión: 1.0.1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
