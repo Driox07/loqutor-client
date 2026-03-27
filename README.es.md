@@ -1,6 +1,6 @@
 # Loqutor Client
 
-Idioma: [English](README.md) | Espanol
+Idioma: [English](README.md) | Español
 
 Loqutor Client es una aplicacion de escritorio Java (Swing) para sintesis de voz (TTS). Permite cargar o escribir un guion, reproducir audio generado desde una API TTS externa y exportar el resultado a archivos MP3.
 
@@ -31,6 +31,8 @@ El programa necesita los siguientes `.json` junto al ejecutable:
 Si `ApiSettings.json` no es valido o no existe, la aplicacion mostrara un error al intentar convertir texto.
 
 `ApiSettings.json` se puede generar desde las preferencias de la API en el programa.
+
+- [Ejemplos](EXAMPLES.es.md)
 
 ## Requisitos
 
