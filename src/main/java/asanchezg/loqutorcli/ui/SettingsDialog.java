@@ -23,7 +23,8 @@ public class SettingsDialog extends javax.swing.JDialog {
                !textField.getText().isBlank() &&
                !formatField.getText().isBlank() &&
                !effectField.getText().isBlank() &&
-               !levelField.getText().isBlank();
+               !levelField.getText().isBlank() &&
+               !((int)limitSpinner.getValue() <= 0);
     }
     
     private APISettings createAPISettings(){
@@ -34,7 +35,8 @@ public class SettingsDialog extends javax.swing.JDialog {
         textField.getText(),
         formatField.getText(),
         effectField.getText(),
-        levelField.getText());
+        levelField.getText(),
+        (int)limitSpinner.getValue());
     }
     
     private void loadFields(){
@@ -48,6 +50,7 @@ public class SettingsDialog extends javax.swing.JDialog {
             formatField.setText(apiSettings.formatParameter);
             effectField.setText(apiSettings.effectParameter);
             levelField.setText(apiSettings.levelParameter);
+            limitSpinner.setValue(apiSettings.textLimit);
         }
     }
 
@@ -74,13 +77,15 @@ public class SettingsDialog extends javax.swing.JDialog {
         levelField = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         formatField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        limitSpinner = new javax.swing.JSpinner();
         cancelBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(456, 303));
+        setPreferredSize(new java.awt.Dimension(456, 347));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("API Settings"));
@@ -89,7 +94,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel2.setText("API URL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
@@ -97,7 +102,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel3.setText("Engine parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -105,7 +110,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel4.setText("Language parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
@@ -113,7 +118,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel5.setText("Voice parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel5, gridBagConstraints);
@@ -121,7 +126,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel6.setText("Text parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
@@ -129,7 +134,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel7.setText("Format field");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel7, gridBagConstraints);
@@ -137,55 +142,55 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel8.setText("Level parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel8, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(apiField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(engineField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(langField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(voiceField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(textField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(effectField, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
@@ -194,17 +199,33 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLabel9.setText("Effect parameter");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel1.add(jLabel9, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
         jPanel1.add(formatField, gridBagConstraints);
+
+        jLabel1.setText("Text limit");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        limitSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 4, 4);
+        jPanel1.add(limitSpinner, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -259,6 +280,7 @@ public class SettingsDialog extends javax.swing.JDialog {
     private javax.swing.JTextField effectField;
     private javax.swing.JTextField engineField;
     private javax.swing.JTextField formatField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -271,6 +293,7 @@ public class SettingsDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField langField;
     private javax.swing.JTextField levelField;
+    private javax.swing.JSpinner limitSpinner;
     private javax.swing.JButton saveBtn;
     private javax.swing.JTextField textField;
     private javax.swing.JTextField voiceField;

@@ -11,7 +11,7 @@ public class CacheSignature {
     private final String language;
     private final String voice;
     private final String effect;
-    private final String    level;
+    private final String level;
     
     public CacheSignature(String text, String language, String voice, String effect, String level) {
         this.text = text;
@@ -22,20 +22,17 @@ public class CacheSignature {
     }
     
     @Override
-    public boolean equals(Object obj){
-        if (obj == null) {
-            return false;
-        }
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
 
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
         final CacheSignature other = (CacheSignature) obj;
-        return this.text.equals(other.text) &&
-               this.language.equals(other.language) &&
-               this.voice.equals(other.voice) &&
-               this.effect.equals(other.effect) &&
-               this.level.equals(other.level);
+
+        return Objects.equals(this.text, other.text) &&
+               Objects.equals(this.language, other.language) &&
+               Objects.equals(this.voice, other.voice) &&
+               Objects.equals(this.effect, other.effect) &&
+               Objects.equals(this.level, other.level);
     }
 
     @Override

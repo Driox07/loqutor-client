@@ -4,6 +4,9 @@ import asanchezg.loqutorcli.ttsservice.APISettings;
 import asanchezg.loqutorcli.ttsservice.TTSService;
 import asanchezg.loqutorcli.ttsservice.maps.Maps;
 import asanchezg.loqutorcli.ui.MainForm;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javazoom.jl.player.Player;
 
 /**
@@ -14,13 +17,8 @@ public class Loqutor {
     public static Player player;
     public static void main(String[] args) {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch (UnsupportedLookAndFeelException ex) {
             System.out.println("Error initializing UI: " + ex);
         }
         APISettings.loadSettings();
