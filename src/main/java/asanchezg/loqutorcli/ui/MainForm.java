@@ -34,6 +34,7 @@ public class MainForm extends javax.swing.JFrame {
     
     private void loadLanguageComboBox(){
         Map<String,String> langs = Maps.getMap(Maps.MapType.MAP_LANGUAGE);
+        if(langs == null) return;
         for(String langName : langs.keySet()){
             langCombo.addItem(langName);
         }
@@ -41,6 +42,7 @@ public class MainForm extends javax.swing.JFrame {
     
     private void loadVoiceComboBox(){
         Map<String,String> voices = Maps.getMap(Maps.MapType.MAP_VOICE);
+        if(voices == null) return;
         for(String voiceName : voices.keySet()){
             voiceCombo.addItem(voiceName);
         }
@@ -48,7 +50,7 @@ public class MainForm extends javax.swing.JFrame {
     
     private void loadEffectComboBox(){
         Map<String,String> effects = Maps.getMap(Maps.MapType.MAP_EFFECT);
-        effectCombo.addItem("Ninguno");
+        if(effects == null) return;
         for(String effectName : effects.keySet()){
             effectCombo.addItem(effectName);
         }
@@ -99,6 +101,10 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void play(String text){
+        if(!Maps.areMapsLoaded()){
+            JOptionPane.showMessageDialog(null, "Los mapas no se cargaron correctamente.\nAsegúrate de tener languajes.json, voices.json y effects.json válidos en la carpeta del programa.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if(text == null || text.isBlank()){
             JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -139,6 +145,10 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private void export(String text){
+        if(!Maps.areMapsLoaded()){
+            JOptionPane.showMessageDialog(null, "Los mapas no se cargaron correctamente.\nAsegúrate de tener languajes.json, voices.json y effects.json válidos en la carpeta del programa.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         if(text == null || text.isBlank()){
             JOptionPane.showMessageDialog(null, "Se debe introducir o seleccionar texto para narrar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;

@@ -26,8 +26,12 @@ public class TTSService {
             url = url + apiSettings.levelParameter + "=" + effectLevel + "&";
         }
         url = url + apiSettings.textParameter + "=" + text + "&";
-        url = url + apiSettings.languageParameter + "=" + language + "&";
-        url = url + apiSettings.voiceParameter + "=" + voice + "&";
+        if(language != null){
+            url = url + apiSettings.languageParameter + "=" + language + "&";
+        }
+        if(voice != null){
+            url = url + apiSettings.voiceParameter + "=" + voice + "&";
+        }
         url = url + apiSettings.formatParameter + "=mp3&";
         url = url + apiSettings.engineParameter + "=2";
         return url;

@@ -55,4 +55,11 @@ public class Maps {
             System.out.println(e.getMessage());
         }
     }
+    
+    public static boolean areMapsLoaded(){
+        for(Map<String,String> map : maps){
+            if(map == null) return false;
+        }
+        return true;
+    }
 }
